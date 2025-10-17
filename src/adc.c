@@ -1,6 +1,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include "theremin.h"
+#include "../include/theremin.h"
 
 extern system_state_t sys;
 

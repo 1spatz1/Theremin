@@ -1,7 +1,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "theremin.h"
-#include "filter.h"
+#include "../include/filter.h"
 
 extern system_state_t sys;
 

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
-#include "filter.h"
-#include "theremin.h"
+#include "../include/filter.h"
+#include "../include/theremin.h"
 
 extern system_state_t sys;
 
