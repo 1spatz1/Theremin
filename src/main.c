@@ -6,6 +6,7 @@
 #include "filter.h"
 #include "buttons.h"
 #include "buzzer.h"
+#include "display.h"
 #include "uart.h"
 
 system_state_t sys;
@@ -28,11 +29,13 @@ int main(void) {
     filter_init();
     buttons_init();
     buzzer_init();
+    display_init();
 
     sei();
 
-    uart_init(9600);
-    uart_println("Theremin debug start");
+    // uart for debug
+    // uart_init(9600);
+    // uart_println("Theremin debug start");
 
     uint16_t raw_distance_cm = 0;
     uint16_t filtered_distance_cm = 0;
@@ -75,16 +78,19 @@ int main(void) {
             // update buzzer frequency
             buzzer_set_frequency(frequency_hz);
 
+            display_update(filtered_distance_cm, freq, sys.filter_size);
         }
-        if (sys.new_distance_ready) {
-            uart_print("Dist: ");
-            uart_print_uint16(filtered_distance_cm);
-            uart_print(" cm | Freq: ");
-            uart_print_uint16(frequency_hz);
-            uart_print(" Hz | Filter: ");
-            uart_print_uint8(sys.filter_size);
-            uart_println("");
-        }
+
+        // uart for debug
+        // if (sys.new_distance_ready) {
+        //     uart_print("Dist: ");
+        //     uart_print_uint16(filtered_distance_cm);
+        //     uart_print(" cm | Freq: ");
+        //     uart_print_uint16(frequency_hz);
+        //     uart_print(" Hz | Filter: ");
+        //     uart_print_uint8(sys.filter_size);
+        //     uart_println("");
+        // }
 
     }
     return 0;
