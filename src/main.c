@@ -4,6 +4,7 @@
 #include "adc.h"
 #include "ultrasonic.h"
 #include "filter.h"
+#include "buttons.h"
 #include "uart.h"
 
 system_state_t sys;
@@ -24,6 +25,7 @@ int main(void) {
     adc_init();
     ultrasonic_init();
     filter_init();
+    buttons_init();
 
     sei();
 
