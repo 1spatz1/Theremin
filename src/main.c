@@ -5,6 +5,7 @@
 #include "ultrasonic.h"
 #include "filter.h"
 #include "buttons.h"
+#include "buzzer.h"
 #include "uart.h"
 
 system_state_t sys;
@@ -26,6 +27,7 @@ int main(void) {
     ultrasonic_init();
     filter_init();
     buttons_init();
+    buzzer_init();
 
     sei();
 
@@ -34,6 +36,7 @@ int main(void) {
 
     uint16_t raw_distance_cm = 0;
     uint16_t filtered_distance_cm = 0;
+    uint16_t frequency_hz = FREQ_MIN;
 
     // main non-blocking loop
     while (1) {
@@ -60,12 +63,25 @@ int main(void) {
             // add to filter and get filtered distance
             filtered_distance_cm = filter_add_sample_and_get_median(raw_distance_cm);
 
+            // map filtered distance to frequency: 0..65cm -> 1400..230
+            uint32_t delta = (uint32_t)(FREQ_MAX - FREQ_MIN); // 1170
+            uint32_t freq = FREQ_MAX;
+            // linear mapping: freq = FREQ_MAX - (dist * delta)/MAX_DISTANCE_CM
+            freq = FREQ_MAX - ((uint32_t)filtered_distance_cm * delta) / MAX_DISTANCE_CM;
+            if (freq < FREQ_MIN) freq = FREQ_MIN;
+            if (freq > FREQ_MAX) freq = FREQ_MAX;
+            frequency_hz = (uint16_t)freq;
+
+            // update buzzer frequency
+            buzzer_set_frequency(frequency_hz);
+
         }
         if (sys.new_distance_ready) {
-            // ... compute filtered_distance_cm and freq
             uart_print("Dist: ");
             uart_print_uint16(filtered_distance_cm);
-            uart_print("Filter: ");
+            uart_print(" cm | Freq: ");
+            uart_print_uint16(frequency_hz);
+            uart_print(" Hz | Filter: ");
             uart_print_uint8(sys.filter_size);
             uart_println("");
         }
