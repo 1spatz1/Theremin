@@ -1,8 +1,8 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdio.h>
-#include "twi.h"
-#include "hd44780pcf8574.h"
+#include "../lib/twi/twi.h"
+#include "../lib/hd44780pcf8574/hd44780pcf8574.h"
 #include "display.h"
 
 #define LCD_ADDR       0x27
