@@ -32,7 +32,7 @@ void buzzer_init(void) {
 }
 
 // compute OCR0A for desired frequency: OCR0A = F_CPU / (prescaler * 2 * freq) - 1
-static uint8_t compute_ocr0a_for_freq(uint16_t freq) {
+uint8_t compute_ocr0a_for_freq(uint16_t freq) {
     uint32_t prescaler = 256UL;
     uint32_t val = (F_CPU / (prescaler * 2UL * (uint32_t)freq));
     if (val == 0) return 0;
